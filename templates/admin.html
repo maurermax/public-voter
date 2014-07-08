@@ -1,0 +1,116 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <title>Public-Voter Administration</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<link rel="stylesheet" href="styles.css" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
+	<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  </head>
+  <body>
+	<div data-role="page">
+	<div data-role="header">
+		<h1>Administration</h1>
+	</div>
+			<div role="main" class="ui-content">
+  <form action="#" onsubmit="return false;">
+	<h2>Show Options</h2>
+	<button onclick="showOptions();">Show/Hide Options</button>
+	<h2>Reset votes</h2>
+	<button onclick="resetVotes();">Reset Votes</button>
+  <h2>Ready2Go Questions</h2>
+  <div id="questionsReady">
+  </div>
+  <h2>Set Question</h2>
+	<input type="text" id="question" name="question" value="" placeholder="Do you prefer Option 1 or Option 2?"/>
+    <div id="questionOptions">
+    </div>
+	<button onclick="createQuestion();">Create Question</button>
+  </form>
+  <h2>Debug Data</h2>
+  <div id="data">data</div>
+  </div>
+  <script>
+      function createReadyQuestion(question, options) {
+          var btn = $("<button/>");
+          btn.text(question);
+          btn.data("question",question);
+          btn.data("options",options);
+          btn.click(function(event) {
+              var el = event.target;
+             setQuestion($(el).data("question"),$(el).data("options"));
+          });
+          $("#questionsReady").append(btn);
+          $("#questionsReady").trigger("create");
+      }
+      function initQuestions() {
+        $("#questionsReady").html("");
+        $.getJSON("questions.json", function(data) {
+            for (var i=0;i<data.length;i++) {
+                createReadyQuestion(data[i].question,data[i].options);
+            }
+        }).fail(function(jqXHR, textStatus, errorThrown) {
+                    console.error( textStatus );
+                });
+	  }
+      initQuestions();
+      var optionsCount = 0;
+      var minOptions = 2;
+      function removeOption() {
+          $("#option"+(optionsCount-1)).remove();
+          optionsCount--;
+      }
+      function addOption() {
+          var el = $("<input/>",{id:"option"+(optionsCount),name:"option"+optionsCount,placeholder:"Option "+(optionsCount+1)});
+          optionsCount++;
+          el.on("change keyup",function(el) {
+             if ($("#option"+(optionsCount-1)).val().length>0) {
+                 addOption();
+             }
+             while (optionsCount>minOptions && $("#option"+(optionsCount-2)).val().length===0) {
+                 removeOption();
+             }
+          });
+          $("#questionOptions").append(el);
+          $("#questionOptions").trigger("create");
+      }
+      function initOptions() {
+        for (var i=0;i<minOptions;i++) {
+            addOption();
+        }
+      }
+      initOptions();
+	  function createQuestion() {
+		var question = $("#question").val();
+		var options = [];
+		for (var i=0;i<optionsCount;i++) {
+			var optionVal = $("#option"+i).val();
+			if (optionVal.length>0) {
+				options.push(optionVal);
+			}
+		}
+		setQuestion(question,options);
+		return false;
+	  }
+      var socket = io();
+	  function setQuestion(question, options) {
+		socket.emit('setQuestion', {question:question, options:options});
+	  }
+	  function showOptions() {
+		socket.emit('showOptions');
+	  }
+	  function resetVotes() {
+		socket.emit('reset');
+		return false;
+	  }
+  socket.on('update', function(data){
+    $("#data").html(JSON.stringify(data));
+  });
+		socket.emit('update');
+  </script>
+  </body>
+</html>

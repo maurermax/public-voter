@@ -22,3 +22,6 @@ http://localhost:3000/report
 
 Incoming users should use:
 http://localhost:3000
+
+## Editing Standard Questions
+Please use the /static/questions.json file to set standard questions that should be directly accessed.

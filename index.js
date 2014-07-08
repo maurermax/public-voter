@@ -4,18 +4,18 @@ var http = require('http').Server(app);
 var io = require('socket.io')(http);
 app.use(express.static(__dirname + '/static'));
 app.get('/', function(req, res){
-  res.sendfile('index.html');
+  res.sendfile('templates/index.html');
 });
 
 app.get('/report', function(req, res){
-  res.sendfile('report.html');
+  res.sendfile('templates/report.html');
 });
 
 app.get('/admin', function(req, res){
-  res.sendfile('admin.html');
+  res.sendfile('templates/admin.html');
 });
 
-var voteData = {question:"Erste Frage",options:["Sebastian","Lena"],votes:{},showOptions:false};
+var voteData = {question:"Question",options:["Option 1","Option 2"],votes:{},showOptions:false};
 
 io.on('connection', function(socket){
 	console.log('a user connected');
