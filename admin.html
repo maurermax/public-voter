@@ -1,0 +1,89 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<link rel="stylesheet" href="styles.css" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
+	<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+  </head>
+  <body>
+	<div data-role="page">
+	<div data-role="header">
+		<h1 id="question">Administration</h1>
+	</div>
+			<div role="main" class="ui-content">
+  <form action="#" onsubmit="return false;">
+	<h2>Show Options</h2>
+	<button onclick="showOptions();">Show/Hide Options</button>
+	<h2>Reset votes</h2>
+	<button onclick="resetVotes();">Reset Votes</button>
+  <h2>Fertige Fragen</h2>
+  <div id="questionsReady">
+  </div>
+  <h2>Frage setzen</h2>
+	<input type="text" id="question" name="question" value="" placeholder="Was ist der Sinn des Lebens?"/>
+	<input type="text" id="option1" name="option1" value="" placeholder="Antwort 1"/>
+	<input type="text" id="option2" name="option2" value="" placeholder="Antwort 2"/>
+	<input type="text" id="option3" name="option3" value="" placeholder="Antwort 3"/>
+	<input type="text" id="option4" name="option4" value="" placeholder="Antwort 4"/>
+	<input type="text" id="option5" name="option5" value="" placeholder="Antwort 5"/>
+	<button onclick="createQuestion();">Frage erstellen</button>
+  </form>
+  <h2>Debug daten</h2>
+  <div id="data">data</div>
+  </div>
+		<script>
+	  var socket = io();
+	  function initQuestions() {
+		$("#questionsReady").html("");
+		createReadyQuestion("Ausgehen: &ldquo;Schatz, sehe ich in dem Outfit dick aus?&rdquo;");
+		createReadyQuestion("Einkaufen: &ldquo;Nimm lieber das von Käfer, das ist besser!&rdquo;");
+		createReadyQuestion("Urlaub: &ldquo;Schatz, ich geh mal schnell die Liegen reservieren!&rdquo;");
+		createReadyQuestion("Kinder: &ldquo;Schatz, stehst du auf?&rdquo;");
+		createReadyQuestion("Haustier: &ldquo;Oh, Ben!!!&rdquo;");
+		createReadyQuestion("Rente: &ldquo;Kannst du mich zum Arzt fahren, nachdem du den Müll rausgebracht hast?&rdquo;");
+		createReadyQuestion("Restaurant: &ldquo;Ich hätte gerne den Salat mit Putenstreifen, aber die Putenstreifen bitte mager!&rdquo;");
+		createReadyQuestion("Kochen: &ldquo;Die Zwiebeln müssen aber noch ein bisschen feiner geschnitten werden!&rdquo;");
+		createReadyQuestion("Autofahren: &ldquo;Schatz, hier ist nur 120km/H!&rdquo;");
+		createReadyQuestion("Pünktlichkeit: &ldquo;Schatz, wir hätten vor einer halben Stunde losfahren müssen!&rdquo;");
+		createReadyQuestion("Ausgehen: &ldquo;Ich bin müde, gehen wir nach Hause?&rdquo;");
+		$("#questionsRead").trigger("create");
+	  }
+		initQuestions();
+	  function createReadyQuestion(q) {
+			$("#questionsReady").append("<button onclick=\"setQuestion('"+q+"',['Sebastian','Lena']);\">"+q+"</button>");
+	  }
+	  function createQuestion() {
+		var question = $("#question").val();
+		var options = [];
+		for (var i=1;i<=5;i++) {
+			var optionVal = $("#option"+i).val();
+			if (optionVal.length>0) {
+				options.push(optionVal);
+			}
+		}
+		setQuestion(question,options);
+		return false;
+	  }
+	  function setQuestion(question, options) {
+		socket.emit('setQuestion', {question:question, options:options});
+	  }
+	  function showOptions() {
+		socket.emit('showOptions');
+	  }
+	  function resetVotes() {
+		socket.emit('reset');
+		return false;
+	  }
+  socket.on('update', function(data){
+    $("#data").html(JSON.stringify(data));
+  });
+		socket.emit('update');
+  </script>
+  </body>
+</html>

@@ -1,0 +1,105 @@
+﻿<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<meta charset="utf-8"> 
+ <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+ <script type="text/javascript" src="http://underscorejs.org/underscore.js"></script>
+    <script type="text/javascript">
+      google.load("visualization", "1", {packages:["corechart"]});
+      google.setOnLoadCallback(chartLoaded);
+      var options = {
+          title: 'Frage?',
+			animation:{
+			duration: 500,
+			},
+			vAxis: {minValue:0, viewWindow: {min:0}},
+			hAxis: {textStyle: {color:"transparent"}},
+			fontSize: 30,
+			legend: 'none',
+			backgroundColor: { fill:'transparent' }
+	  };
+		var chart;
+	  var chartData;
+	  var view;
+		function chartLoaded() {
+			chart = new google.visualization.ColumnChart(document.getElementById('chart_div'));
+			socket.emit('update');
+		}
+    </script>
+	<style>
+body, html {
+  height: 100%;
+  background: #eee;
+  margin: 0;
+}
+	</style>
+	</head>
+  <body>
+    <div id="chart_div" style="width: 100%; height: 100%;"></div>
+	<script>
+	  var socket = io();
+	  var columnRand = [];
+	  
+	  socket.on('update', function(data){
+		if (data.question != options.title) {
+			options.title=data.question;
+			chartData = new google.visualization.DataTable();
+			chartData.addColumn('string', 'Name');
+			chartData.addColumn('number', 'Value');
+			columnRand = [];
+			for (var i=0;i<data.options.length;i++) {
+				columnRand.push(i);
+			}
+			columnRand = _.shuffle(columnRand);
+			for (var i=0;i<data.options.length;i++) {
+				var key = data.options[i];
+				chartData.addRow([getQm(i),0]);
+			}
+			for (var i=0;i<data.options.length;i++) {
+				var key = data.options[i];
+				chartData.setValue(columnRand[i],0,key);
+			}
+			view = new google.visualization.DataView(chartData);
+		}
+		for (var i=0;i<data.options.length;i++) {
+			var key = data.options[i];
+			var val = 0;
+			if (data.votes[key]) {
+				val = data.votes[key];
+			}
+			var col = data.options.indexOf(key);
+			chartData.setValue(columnRand[col],1,val);
+			if (data.showOptions) {
+				options.hAxis.textStyle.color = "#000000";
+			} else {
+				options.hAxis.textStyle.color = "transparent";
+			}
+		}
+      view.setColumns([0, 1,
+                       { calc: "stringify",
+                         sourceColumn: 1,
+                         type: "string",
+                         role: "annotation" }]);
+						 drawChart();
+  });
+  function getQm(num) {
+	var s = "?";
+	for (var i=0;i<num;i++) {
+		s+="?";
+	}
+	return s;
+  }
+  function drawChart() {
+     chart.draw(view, options);
+  }
+		$(document).ready(function () {
+			$(window).resize(function(){
+				drawChart();
+			});
+		});
+  </script>
+  </body>
+</html>

@@ -1,0 +1,49 @@
+<!doctype html>
+<html>
+  <head>
+    <title>Socket.IO chat</title>
+	<script src="/socket.io/socket.io.js"></script>
+	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+	<link rel="stylesheet" href="styles.css" />
+	<link rel="stylesheet" href="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.css" />
+	<script src="http://code.jquery.com/mobile/1.4.3/jquery.mobile-1.4.3.min.js"></script>
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+  </head>
+  <body>
+	<div data-role="page">
+		<div data-role="header">
+			<h1 id="question"></h1>
+		</div>
+		<div role="main" class="ui-content">
+			<form action="#" onsubmit="return false;">
+				<div id="buttons">
+					
+				</div>
+			</form>
+			<div id="thankyou">
+				Antwort registriert.
+			</div>
+		</div>
+	</div>
+	<script>
+		var socket = io();
+		function vote(option) {
+			socket.emit('vote', option);
+			$("#thankyou").show().fadeOut(2000);
+			return false;
+		}
+		socket.on('update', function(data){
+			if ($("#question").html() != data.question) {
+				$("#question").html(data.question);
+				$("#buttons").html("");
+				for (var i=0;i<data.options.length;i++) {
+					$("#buttons").append("<button onclick=\"vote('"+data.options[i]+"');\">"+data.options[i]+"</button>");
+				}
+				$("#buttons").trigger("create")
+
+			}
+		});
+		socket.emit('update');
+  </script>
+  </body>
+</html>
