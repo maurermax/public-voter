@@ -14,8 +14,8 @@ node index.js
 ```
 
 ## Using
-Access http://localhost:3000/admin for an admin inteface
+Access [http://localhost:3000/admin] for an admin interface
 
-Use http://localhost:3000/report for the reporting overview
+Use [http://localhost:3000/report] for the reporting overview
 
-Incoming users should use http://localhost:3000 
+Incoming users should use [http://localhost:3000]
