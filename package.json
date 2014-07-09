@@ -1,6 +1,6 @@
 {
   "name": "public-voter",
-  "version": "0.8.0",
+  "version": "0.8.1",
   "description": "Public-Voter is a interactive voting client that enables administrators to set up questions for devices that connect to the voting server. User can vote and the current results will be seen live.",
   "main": "index.js",
   "scripts": {
