@@ -1,12 +1,12 @@
 {
-  "name": "voter",
-  "version": "0.0.0",
-  "description": "",
+  "name": "public-voter",
+  "version": "0.8.0",
+  "description": "Public-Voter is a interactive voting client that enables administrators to set up questions for devices that connect to the voting server. User can vote and the current results will be seen live.",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
-  "author": "",
+  "author": "Max Maurer",
   "license": "ISC",
   "dependencies": {
     "express": "^4.5.0",

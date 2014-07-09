@@ -1,13 +1,3 @@
 [
-  {"question":"Ausgehen: \"Schatz, sehe ich in dem Outfit dick aus?\"","options":["Sebastian","Lena"]},
-  {"question":"Einkaufen: \"Nimm lieber das von Käfer, das ist besser!\"","options":["Sebastian","Lena"]},
-  {"question":"Urlaub: \"Schatz, ich geh mal schnell die Liegen reservieren!\"","options":["Sebastian","Lena"]},
-  {"question":"Kinder: \"Schatz, stehst du auf?\"","options":["Sebastian","Lena"]},
-  {"question":"Haustier: \"Oh, Ben!!!\"","options":["Sebastian","Lena"]},
-  {"question":"Rente: \"Kannst du mich zum Arzt fahren, nachdem du den Müll rausgebracht hast?\"","options":["Sebastian","Lena"]},
-  {"question":"Restaurant: \"Ich hätte gerne den Salat mit Putenstreifen, aber die Putenstreifen bitte mager!\"","options":["Sebastian","Lena"]},
-  {"question":"Kochen: \"Die Zwiebeln müssen aber noch ein bisschen feiner geschnitten werden!\"","options":["Sebastian","Lena"]},
-  {"question":"Autofahren: \"Schatz, hier ist nur 120km/H!\"","options":["Sebastian","Lena"]},
-  {"question":"Pünktlichkeit: \"Schatz, wir hätten vor einer halben Stunde losfahren müssen!\"","options":["Sebastian","Lena"]},
-  {"question":"Ausgehen: \"Ich bin müde, gehen wir nach Hause?\"","options":["Sebastian","Lena"]}
+  {"question":"What are you voting for?\"","options":["Republicans","Democrats"]},
 ]
