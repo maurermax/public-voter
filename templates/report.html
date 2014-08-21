@@ -1,10 +1,10 @@
 ﻿<!doctype html>
 <html>
   <head>
-    <title>Socket.IO chat</title>
+    <title>Public-Voter - Report</title>
 	<script src="/socket.io/socket.io.js"></script>
 	<script src="http://code.jquery.com/jquery-1.11.1.js"></script>
-	<meta charset="utf-8"> 
+	<meta charset="utf-8">
  <script type="text/javascript" src="https://www.google.com/jsapi"></script>
  <script type="text/javascript" src="http://underscorejs.org/underscore.js"></script>
     <script type="text/javascript">
@@ -42,7 +42,7 @@ body, html {
 	<script>
 	  var socket = io();
 	  var columnRand = [];
-	  
+
 	  socket.on('update', function(data){
 		if (data.question != options.title) {
 			options.title=data.question;
